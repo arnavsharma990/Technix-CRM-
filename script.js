@@ -1133,3 +1133,138 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   });
+
+  // Add this to your script.js file
+
+document.addEventListener('DOMContentLoaded', function() {
+  const chartContainer = document.getElementById('chart-container');
+  if (!chartContainer) return;
+  
+  // Basic chart setup if you want a fallback without React
+  setupFallbackChart();
+  
+  // Function to check if script is already loaded
+  function isScriptLoaded(src) {
+    return document.querySelector(`script[src="${src}"]`) !== null;
+  }
+  
+  // Function to load React and ReactDOM scripts
+  function loadReactScripts() {
+    if (!isScriptLoaded('https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js')) {
+      const reactScript = document.createElement('script');
+      reactScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js';
+      document.head.appendChild(reactScript);
+    }
+    
+    if (!isScriptLoaded('https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js')) {
+      const reactDomScript = document.createElement('script');
+      reactDomScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js';
+      document.head.appendChild(reactDomScript);
+      
+      // Load Recharts after React is loaded
+      reactDomScript.onload = function() {
+        loadRechartsScript();
+      };
+    } else {
+      loadRechartsScript();
+    }
+  }
+  
+  // Function to load Recharts script
+  function loadRechartsScript() {
+    if (!isScriptLoaded('https://cdnjs.cloudflare.com/ajax/libs/recharts/2.5.0/Recharts.min.js')) {
+      const rechartsScript = document.createElement('script');
+      rechartsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/recharts/2.5.0/Recharts.min.js';
+      document.head.appendChild(rechartsScript);
+      
+      rechartsScript.onload = function() {
+        // When all required scripts are loaded, initialize your React component
+        initializeChart();
+      };
+    } else {
+      initializeChart();
+    }
+  }
+  
+  // Fallback basic chart using ApexCharts for non-React environments
+  function setupFallbackChart() {
+    if (typeof ApexCharts !== 'undefined') {
+      const options = {
+        chart: {
+          type: 'area',
+          height: 350,
+          fontFamily: 'Poppins, sans-serif',
+          toolbar: {
+            show: false
+          },
+          animations: {
+            enabled: true,
+            easing: 'easeinout',
+            speed: 800
+          }
+        },
+        colors: ['#4361ee', '#4ecdc4', '#ff6b6b'],
+        series: [{
+          name: 'Customers',
+          data: [1200, 1350, 1500, 1640, 1800, 2100]
+        }, {
+          name: 'Leads',
+          data: [800, 920, 1050, 1180, 1300, 1450]
+        }],
+        xaxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          labels: {
+            style: {
+              colors: '#ffffff'
+            }
+          }
+        },
+        yaxis: {
+          labels: {
+            style: {
+              colors: '#ffffff'
+            }
+          }
+        },
+        grid: {
+          borderColor: 'rgba(255,255,255,0.1)',
+          strokeDashArray: 3
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'dark',
+            type: 'vertical',
+            shadeIntensity: 0.5,
+            opacityFrom: 0.7,
+            opacityTo: 0.2,
+            stops: [0, 90, 100]
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth',
+          width: 3
+        },
+        tooltip: {
+          theme: 'dark'
+        }
+      };
+  
+      const chart = new ApexCharts(chartContainer, options);
+      chart.render();
+    }
+  }
+  
+  // Initialize React component for the chart
+  function initializeChart() {
+    // This code would be used if you're implementing the React component directly
+    // For now, we'll rely on the fallback ApexCharts implementation
+    console.log('Chart libraries loaded successfully');
+  }
+  
+  // Load the necessary scripts
+  loadReactScripts();
+});

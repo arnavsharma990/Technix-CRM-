@@ -8,39 +8,53 @@ document.addEventListener('DOMContentLoaded', function() {
     const typingIndicator = document.getElementById('typingIndicator');
     const chatInput = document.getElementById('chatInput');
     
-    // Initial welcome message
-    setTimeout(() => {
-        addBotMessage("Hello! I'm your T-CRM assistant. How can I help you automate tasks and boost your team's performance today?");
+    // Start with chat collapsed
+    chatContainer.classList.add('collapsed');
+    toggleChat.textContent = '+';
     
-        // Add quick replies
-        const quickRepliesDiv = document.createElement('div');
-        quickRepliesDiv.className = 'quick-replies';
-        
-        const quickReplies = [
-            "How can T-CRM help my sales team?", 
-            "What tasks can be automated?",
-            "Tell me about pricing"
-        ];
-        
-        quickReplies.forEach(reply => {
-            const quickReply = document.createElement('div');
-            quickReply.className = 'quick-reply';
-            quickReply.textContent = reply;
-            quickReply.addEventListener('click', () => {
-                handleUserMessage(reply);
-            });
-            quickRepliesDiv.appendChild(quickReply);
-        });
-        
-        chatMessages.appendChild(quickRepliesDiv);
-    }, 500);
+    // Initialize welcome message (but it won't be visible until chat is opened)
+    let welcomeMessageAdded = false;
     
-        // Toggle chat
+    // Toggle chat
     toggleChat.addEventListener('click', function(e) {
         e.stopPropagation(); // Prevent event bubbling to header
         chatContainer.classList.toggle('collapsed');
+        
         if(!chatContainer.classList.contains('collapsed')) {
             toggleChat.textContent = '−';
+            
+            // Add welcome message only the first time the chat is opened
+            if (!welcomeMessageAdded) {
+                welcomeMessageAdded = true;
+                
+                // Add initial welcome message
+                setTimeout(() => {
+                    addBotMessage("Hello! I'm your T-CRM assistant. How can I help you automate tasks and boost your team's performance today?");
+                
+                    // Add quick replies
+                    const quickRepliesDiv = document.createElement('div');
+                    quickRepliesDiv.className = 'quick-replies';
+                    
+                    const quickReplies = [
+                        "How can T-CRM help my sales team?", 
+                        "What tasks can be automated?",
+                        "Tell me about pricing"
+                    ];
+                    
+                    quickReplies.forEach(reply => {
+                        const quickReply = document.createElement('div');
+                        quickReply.className = 'quick-reply';
+                        quickReply.textContent = reply;
+                        quickReply.addEventListener('click', () => {
+                            handleUserMessage(reply);
+                        });
+                        quickRepliesDiv.appendChild(quickReply);
+                    });
+                    
+                    chatMessages.appendChild(quickRepliesDiv);
+                }, 500);
+            }
+            
             chatMessages.scrollTop = chatMessages.scrollHeight;
         } else {
             toggleChat.textContent = '+';
@@ -52,6 +66,39 @@ document.addEventListener('DOMContentLoaded', function() {
         if(chatContainer.classList.contains('collapsed')) {
             chatContainer.classList.remove('collapsed');
             toggleChat.textContent = '−';
+            
+            // Add welcome message only the first time the chat is opened
+            if (!welcomeMessageAdded) {
+                welcomeMessageAdded = true;
+                
+                // Add initial welcome message
+                setTimeout(() => {
+                    addBotMessage("Hello! I'm your T-CRM assistant. How can I help you automate tasks and boost your team's performance today?");
+                
+                    // Add quick replies
+                    const quickRepliesDiv = document.createElement('div');
+                    quickRepliesDiv.className = 'quick-replies';
+                    
+                    const quickReplies = [
+                        "How can T-CRM help my sales team?", 
+                        "What tasks can be automated?",
+                        "Tell me about pricing"
+                    ];
+                    
+                    quickReplies.forEach(reply => {
+                        const quickReply = document.createElement('div');
+                        quickReply.className = 'quick-reply';
+                        quickReply.textContent = reply;
+                        quickReply.addEventListener('click', () => {
+                            handleUserMessage(reply);
+                        });
+                        quickRepliesDiv.appendChild(quickReply);
+                    });
+                    
+                    chatMessages.appendChild(quickRepliesDiv);
+                }, 500);
+            }
+            
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     });

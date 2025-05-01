@@ -29,7 +29,16 @@
             <li><a href="news.html" class="nav-link">News</a></li>
           </ul>
           <div class="auth-buttons">
-            <button class="login-button">Log In</button>
+            <a id="login" href="loginpage.html" class="login-button">Log In</a>
+            <style> 
+            #login{
+              text-decoration: none;
+              color: inherit;
+            }
+            </style>
+
+
+
             <button class="signup-button">Sign Up Free</button>
           </div>
           <button class="mobile-menu-toggle">
@@ -89,17 +98,8 @@
             </div>
             <div class="hero-image-column">
               <div class="hero-image-wrapper">
-                <img
-                  alt="T-CRM Dashboard Preview"
-                  src="/api/placeholder/600/400"
-                  class="hero-image"
-                />
-                <div class="floating-card card-1">
-                  <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
-                  <div class="card-content">
-                    <span class="card-title">24% Growth</span>
-                    <span class="card-subtitle">in Q2 2025</span>
-                  </div>
+                <div id="chart-container" class="chart-container"></div>
+               
                 </div>
                 <div class="floating-card card-2">
                   <div class="card-icon"><i class="fas fa-users"></i></div>
