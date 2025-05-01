@@ -621,5 +621,226 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.0/apexcharts.min.js"></script>
     <script src="script.js"></script>
+    <!-- Add this to your HTML body, before the closing </body> tag -->
+<div class="activity-notifications" id="activityNotifications">
+  <!-- Notifications will appear here -->
+</div>
+
+<style>
+.activity-notifications {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  max-width: 300px;
+}
+
+.activity-notification {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  transform: translateX(-120%);
+  opacity: 0;
+  transition: all 0.5s ease;
+  border-left: 4px solid #4361ee;
+}
+
+.activity-notification.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.notification-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #eef2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.notification-avatar i {
+  color: #4361ee;
+  font-size: 16px;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-content p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.notification-content .timestamp {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+.notification-close {
+  color: #6c757d;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 4px;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.notification-close:hover {
+  opacity: 1;
+}
+</style>
+
+<script>
+// Array of notification data
+const notificationData = [
+  {
+      name: "Harsh P.",
+      action: "just upgraded to Premium plan",
+      avatar: "user", // user icon
+      time: "Just now"
+  },
+  {
+      name: "Emma S.",
+      action: "scheduled a demo call",
+      avatar: "calendar", // calendar icon
+      time: "2 minutes ago"
+  },
+  {
+      name: "Michael T.",
+      action: "started a free trial",
+      avatar: "star", // star icon
+      time: "5 minutes ago"
+  },
+  {
+      name: "Sarah K.",
+      action: "closed 3 deals this week",
+      avatar: "check", // check icon
+      time: "10 minutes ago"
+  },
+  {
+      name: "David L.",
+      action: "generated 50+ new leads",
+      avatar: "users", // users icon
+      time: "15 minutes ago"
+  },
+  {
+      name: "Alex M.",
+      action: "just signed up for Enterprise plan",
+      avatar: "crown", // crown icon
+      time: "3 minutes ago"
+  },
+  {
+      name: "Jennifer R.",
+      action: "improved conversion rate by 23%",
+      avatar: "chart-line", // chart icon
+      time: "8 minutes ago"
+  },
+  {
+      name: "Thomas W.",
+      action: "invited team members to T-CRM",
+      avatar: "user-plus", // user-plus icon
+      time: "Just now"
+  }
+];
+
+// Function to create a notification element
+function createNotification(data) {
+  const notification = document.createElement('div');
+  notification.className = 'activity-notification';
+  
+  // Get icon class based on avatar type
+  let iconClass = 'fa-user';
+  if (data.avatar === 'calendar') iconClass = 'fa-calendar';
+  if (data.avatar === 'star') iconClass = 'fa-star';
+  if (data.avatar === 'check') iconClass = 'fa-check';
+  if (data.avatar === 'users') iconClass = 'fa-users';
+  if (data.avatar === 'crown') iconClass = 'fa-crown';
+  if (data.avatar === 'chart-line') iconClass = 'fa-chart-line';
+  if (data.avatar === 'user-plus') iconClass = 'fa-user-plus';
+  
+  notification.innerHTML = `
+      <div class="notification-avatar">
+          <i class="fas ${iconClass}"></i>
+      </div>
+      <div class="notification-content">
+          <p><strong>${data.name}</strong> ${data.action}</p>
+          <div class="timestamp">${data.time}</div>
+      </div>
+      <button class="notification-close">
+          <i class="fas fa-times"></i>
+      </button>
+  `;
+  
+  return notification;
+}
+
+// Function to show a random notification
+function showRandomNotification() {
+  const container = document.getElementById('activityNotifications');
+  if (!container) return;
+  
+  // Select random notification data
+  const randomIndex = Math.floor(Math.random() * notificationData.length);
+  const data = notificationData[randomIndex];
+  
+  // Create notification element
+  const notification = createNotification(data);
+  container.appendChild(notification);
+  
+  // Trigger animation to show the notification
+  setTimeout(() => {
+      notification.classList.add('show');
+  }, 100);
+  
+  // Add event listener to close button
+  const closeBtn = notification.querySelector('.notification-close');
+  closeBtn.addEventListener('click', () => {
+      notification.classList.remove('show');
+      setTimeout(() => {
+          container.removeChild(notification);
+      }, 500);
+  });
+  
+  // Auto-remove notification after 5 seconds
+  setTimeout(() => {
+      if (notification.parentNode === container) {
+          notification.classList.remove('show');
+          setTimeout(() => {
+              if (notification.parentNode === container) {
+                  container.removeChild(notification);
+              }
+          }, 500);
+      }
+  }, 5000);
+}
+
+// Start showing notifications after page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Show first notification after 3 seconds
+  setTimeout(() => {
+      showRandomNotification();
+      
+      // Then show a new notification every 8-15 seconds
+      setInterval(() => {
+          showRandomNotification();
+      }, Math.random() * 7000 + 8000); // Random interval between 8-15 seconds
+  }, 3000);
+});
+</script>
   </body>
 </html>
