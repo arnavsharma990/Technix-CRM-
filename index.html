@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>T-CRM Intro Animation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <style>
     body, html {
       margin: 0;
@@ -12,8 +13,8 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
-      background-color: white;
-      font-family: 'Montserrat', sans-serif;
+      background-color: #f8f9fa;
+      font-family: 'Inter', sans-serif;
     }
     
     .animation-container {
@@ -23,19 +24,54 @@
       height: 100vh;
       width: 100vw;
       position: relative;
+      background: linear-gradient(135deg, #ffffff 0%, #f2f6ff 100%);
     }
     
-    .text-container {
-      position: absolute;
+    .content-wrapper {
+      position: relative;
+      width: 80%;
+      max-width: 800px;
       text-align: center;
     }
     
-    .animated-text {
-      color: #1a73e8;
+    .logo {
+      margin-bottom: 2rem;
+      transform: scale(0);
+      opacity: 0;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+    }
+    
+    .logo.visible {
+      transform: scale(1);
+      opacity: 1;
+    }
+    
+    .logo-text {
       font-size: 3.5rem;
+      font-weight: 700;
+      color: #1a73e8;
+      letter-spacing: -1px;
+    }
+    
+    .logo-text span {
+      color: #5f6368;
+    }
+    
+    .text-container {
+      position: relative;
+      height: 5rem;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    
+    .animated-text {
+      position: absolute;
+      width: 100%;
+      color: #202124;
+      font-size: 2.5rem;
       font-weight: 600;
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(40px);
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
     
@@ -46,17 +82,74 @@
     
     .animated-text.fade-out {
       opacity: 0;
-      transform: translateY(-20px);
+      transform: translateY(-40px);
       transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    
+    .loader-container {
+      position: relative;
+      width: 100%;
+      height: 6px;
+      background: rgba(26, 115, 232, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
     }
     
     .loader {
       position: absolute;
-      bottom: 15%;
       width: 0%;
-      height: 4px;
+      height: 100%;
       background: #1a73e8;
-      transition: width 4s linear;
+      border-radius: 3px;
+      transition: width 4s cubic-bezier(0.1, 0.5, 0.5, 1);
+    }
+    
+    .particles-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      background-color: rgba(26, 115, 232, 0.2);
+      border-radius: 50%;
+    }
+
+    .floating-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(26, 115, 232, 0.1) 0%, rgba(66, 133, 244, 0.05) 100%);
+      animation: float 15s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(5%, 5%) rotate(5deg);
+      }
+      50% {
+        transform: translate(0, 10%) rotate(0deg);
+      }
+      75% {
+        transform: translate(-5%, 5%) rotate(-5deg);
+      }
     }
     
     .redirect-overlay {
@@ -76,66 +169,252 @@
       opacity: 1;
       pointer-events: all;
     }
+
+    .audio-control {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      z-index: 10;
+    }
+
+    .audio-control:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .audio-label {
+      position: absolute;
+      bottom: 20px;
+      right: 70px;
+      background-color: rgba(26, 115, 232, 0.1);
+      color: #1a73e8;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .audio-control:hover + .audio-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .audio-icon {
+      width: 24px;
+      height: 24px;
+      fill: #1a73e8;
+    }
+
+    .muted .audio-icon-on {
+      display: none;
+    }
+
+    .audio-icon-off {
+      display: none;
+    }
+
+    .muted .audio-icon-off {
+      display: block;
+    }
   </style>
 </head>
 <body>
   <div class="animation-container">
-    <div class="text-container">
-      <div class="animated-text" id="text1">Automate Sales</div>
-      <div class="animated-text" id="text2">Eliminate Hassle</div>
-      <div class="animated-text" id="text3">Accelerate Growth</div>
+    <div class="floating-shapes" id="floatingShapes"></div>
+    <div class="particles-container" id="particles"></div>
+    
+    <div class="content-wrapper">
+      <div class="logo" id="logo">
+        <div class="logo-text">T-<span>CRM</span></div>
+      </div>
+      
+      <div class="text-container">
+        <div class="animated-text" id="text1">Automate Sales</div>
+        <div class="animated-text" id="text2">Eliminate Hassle</div>
+        <div class="animated-text" id="text3">Accelerate Growth</div>
+      </div>
+      
+      <div class="loader-container">
+        <div class="loader" id="progress"></div>
+      </div>
     </div>
-    <div class="loader" id="progress"></div>
+
+    <div class="audio-control" id="audioControl">
+      <svg class="audio-icon audio-icon-on" viewBox="0 0 24 24">
+        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+      </svg>
+      <svg class="audio-icon audio-icon-off" viewBox="0 0 24 24">
+        <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+      </svg>
+    </div>
+    <div class="audio-label">Click for music</div>
   </div>
   
   <div class="redirect-overlay" id="overlay"></div>
   
+  <audio id="backgroundMusic" loop>
+    <source src="youtube-intro-music-291176.mp3" type="audio/mpeg">
+  </audio>
+  
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const text1 = document.getElementById('text1');
-      const text2 = document.getElementById('text2');
-      const text3 = document.getElementById('text3');
-      const progress = document.getElementById('progress');
-      const overlay = document.getElementById('overlay');
-      
-      // Start progress bar animation
-      setTimeout(() => {
-        progress.style.width = '100%';
-      }, 100);
-      
-      // Animation sequence
-      setTimeout(() => {
-        text1.classList.add('visible');
-      }, 200);
-      
-      setTimeout(() => {
-        text1.classList.add('fade-out');
-        setTimeout(() => {
-          text2.classList.add('visible');
-        }, 300);
-      }, 1250);
-      
-      setTimeout(() => {
-        text2.classList.add('fade-out');
-        setTimeout(() => {
-          text3.classList.add('visible');
-        }, 300);
-      }, 2500);
-      
-      setTimeout(() => {
-        text3.classList.add('fade-out');
-      }, 3750);
-      
-      // Prepare for redirect
-      setTimeout(() => {
-        overlay.classList.add('active');
-        
-        // Redirect to the main T-CRM page after a brief fade-to-white transition
-        setTimeout(() => {
-          window.location.href = 'home.html'; // Change this to your main T-CRM page URL
-        }, 500);
-      }, 4000);
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  const logo = document.getElementById('logo');
+  const text1 = document.getElementById('text1');
+  const text2 = document.getElementById('text2');
+  const text3 = document.getElementById('text3');
+  const progress = document.getElementById('progress');
+  const overlay = document.getElementById('overlay');
+  const audioControl = document.getElementById('audioControl');
+  const backgroundMusic = document.getElementById('backgroundMusic');
+  const particlesContainer = document.getElementById('particles');
+  const floatingShapes = document.getElementById('floatingShapes');
+  
+  // Variable will be set based on autoplay success/failure
+  
+  // Create floating shapes
+  for (let i = 0; i < 5; i++) {
+    const shape = document.createElement('div');
+    shape.classList.add('shape');
+    shape.style.width = `${Math.random() * 300 + 100}px`;
+    shape.style.height = shape.style.width;
+    shape.style.left = `${Math.random() * 80}%`;
+    shape.style.top = `${Math.random() * 80}%`;
+    shape.style.animationDelay = `${Math.random() * 5}s`;
+    shape.style.animationDuration = `${15 + Math.random() * 15}s`;
+    floatingShapes.appendChild(shape);
+  }
+  
+  // Create particles
+  for (let i = 0; i < 30; i++) {
+    createParticle();
+  }
+  
+  function createParticle() {
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
+    
+    const size = Math.random() * 10 + 5;
+    const posX = Math.random() * 100;
+    const posY = Math.random() * 100;
+    const duration = Math.random() * 20 + 10;
+    const delay = Math.random() * 5;
+    
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${posX}%`;
+    particle.style.top = `${posY}%`;
+    particle.style.opacity = Math.random() * 0.5 + 0.1;
+    
+    particle.style.animation = `float ${duration}s infinite ease-in-out ${delay}s`;
+    
+    particlesContainer.appendChild(particle);
+  }
+  
+  // Set audio to be unmuted by default
+  let audioPlaying = false;
+  
+  // Attempt to play audio automatically when page loads
+  backgroundMusic.volume = 0.3;
+  const playPromise = backgroundMusic.play();
+  
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        console.log('Audio playing successfully by default');
+        audioPlaying = true;
+        // Don't add the muted class since we want unmuted by default
+      })
+      .catch(err => {
+        console.error('Autoplay failed:', err);
+        // If autoplay fails, add the muted class
+        audioControl.classList.add('muted');
+        // Most browsers require user interaction to play audio
+        console.log('User interaction required to play audio');
+      });
+  }
+  
+  // Set up click to toggle audio
+  audioControl.addEventListener('click', () => {
+    if (audioPlaying) {
+      backgroundMusic.pause();
+      audioControl.classList.add('muted');
+      audioPlaying = false;
+    } else {
+      backgroundMusic.volume = 0.3;
+      backgroundMusic.play()
+        .then(() => {
+          console.log('Audio playing successfully');
+          audioControl.classList.remove('muted');
+          audioPlaying = true;
+        })
+        .catch(err => {
+          console.error('Audio play failed:', err);
+          if (backgroundMusic.error) {
+            console.error('Audio error code:', backgroundMusic.error.code);
+            console.error('Audio error message:', backgroundMusic.error.message);
+          }
+        });
+    }
+  });
+  
+  // Add a prominent initial animation to encourage clicking
+  audioControl.classList.add('animate__animated', 'animate__pulse', 'animate__infinite');
+  
+  // Animation sequence
+  setTimeout(() => {
+    logo.classList.add('visible');
+  }, 200);
+  
+  setTimeout(() => {
+    progress.style.width = '100%';
+  }, 500);
+  
+  setTimeout(() => {
+    text1.classList.add('visible');
+  }, 1000);
+  
+  setTimeout(() => {
+    text1.classList.add('fade-out');
+    setTimeout(() => {
+      text2.classList.add('visible');
+    }, 300);
+  }, 2000);
+  
+  setTimeout(() => {
+    text2.classList.add('fade-out');
+    setTimeout(() => {
+      text3.classList.add('visible');
+    }, 300);
+  }, 3000);
+  
+  setTimeout(() => {
+    text3.classList.add('fade-out');
+  }, 4000);
+  
+  // Prepare for redirect
+  setTimeout(() => {
+    overlay.classList.add('active');
+    
+    // Redirect to the main T-CRM page after a brief fade-to-white transition
+    setTimeout(() => {
+      window.location.href = 'home.html'; // Change this to your main T-CRM page URL
+    }, 800);
+  }, 5000);
+});
   </script>
 </body>
 </html>
